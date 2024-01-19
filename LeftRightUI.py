@@ -1,4 +1,4 @@
-# Fairness → indib
+# Fairness → binding
 # ライブラリをインポート
 import streamlit as st
 from streamlit_chat import message
@@ -105,12 +105,15 @@ prompt = ChatPromptTemplate.from_messages([
         #prompt=prompt,
         #llm=llm)
     #return conversation
-
+model_select = "gpt-4-1106-preview"
+#st.write(model_select)
 # デコレータを使わない会話履歴読み込み for セッション管理
 def load_conversation():
     if not hasattr(st.session_state, "conversation"):
         llm = ChatOpenAI(
-            model_name="gpt-4",
+            #model_name="gpt-4",
+            #model_name="gpt-4",
+            model_name=model_select,
             temperature=0
         )
         memory = ConversationBufferMemory(return_messages=True)
@@ -145,7 +148,18 @@ def on_input_change():
     user_message = st.session_state.user_message
     conversation = load_conversation()
     with st.spinner("相手からの返信を待っています。。。"):
-        time.sleep(5)
+        if  st.session_state.count == 1:
+            time.sleep(120)
+        elif st.session_state.count == 2:
+            time.sleep(90)
+        elif st.session_state.count == 3:
+            time.sleep(105)
+        elif st.session_state.count == 4:
+            time.sleep(90)
+        elif st.session_state.count == 5:
+            time.sleep(90)
+        else :
+            time.sleep(3)
         answer = conversation.predict(input=user_message)
     st.session_state.generated.append(answer)
     st.session_state.past.append(user_message)
@@ -168,7 +182,7 @@ def redirect_to_url(url):
 # st.title("ChatApp")
 # st.caption("Q&A")
 # st.write("議論を行いましょう！")
-user_number = st.text_input("学籍番号を半角で入力してエンターを押してください")
+user_number = st.text_input("参加者コードを半角で入力してエンターを押してください")
 if user_number:
     # st.write(f"こんにちは、{user_number}さん！")
     # 初期済みでない場合は初期化処理を行う
@@ -185,9 +199,9 @@ chat_placeholder = st.empty()
 # 会話履歴を表示
 with chat_placeholder.container():
     for i in range(len(st.session_state.generated)):
-        message(st.session_state.past[i],is_user=True, key=str(i))
+        message(st.session_state.past[i],is_user=True, key=str(i), avatar_style="adventurer", seed="Nala")
         key_generated = str(i) + "keyg"
-        message(st.session_state.generated[i], key=str(key_generated))
+        message(st.session_state.generated[i], key=str(key_generated), avatar_style="micah")
 
 # 質問入力欄と送信ボタンを設置
 with st.container():
@@ -195,7 +209,9 @@ with st.container():
         user_message = st.text_input("「原子力発電は廃止すべき」という意見に対して、あなたの意見を入力して送信ボタンを押してください", key="user_message")
         st.button("送信", on_click=on_input_change)
     elif st.session_state.count == 5:
-        st.write("意見交換はこれで終了です。URLをクリックしてください。")
+        st.write("意見交換はこちらで終了です。")
+        redirect_link = "https://nagoyapsychology.qualtrics.com/jfe/form/SV_1M3cjOQM09gOcEC"
+        st.markdown(f'<a href="{redirect_link}" target="_blank">こちらを押してください。</a>', unsafe_allow_html=True)
     else:
         user_message = st.text_input("あなたの意見を入力して送信ボタンを押してください", key="user_message")
         st.button("送信", on_click=on_input_change)
@@ -204,11 +220,11 @@ with st.container():
 #    on_input_change()
 
 
-redirect_link = "https://nagoyapsychology.qualtrics.com/jfe/form/SV_cw48jqskbAosSLY"
-st.markdown(f'<a href="{redirect_link}" target="_blank">5往復のチャットが終了したらこちらを押してください。</a>', unsafe_allow_html=True)
+#redirect_link = "https://nagoyapsychology.qualtrics.com/jfe/form/SV_1M3cjOQM09gOcEC"
+#st.markdown(f'<a href="{redirect_link}" target="_blank">5往復のチャットが終了したらこちらを押してください。</a>', unsafe_allow_html=True)
 #if st.button("終了したらこちらを押してください。画面が遷移します。"):
     #redirect_to_url("https://www.google.com")
-    
+
 hide_streamlit_style = """
                 <style>
                 div[data-testid="stToolbar"] {
