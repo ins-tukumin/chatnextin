@@ -182,7 +182,7 @@ def redirect_to_url(url):
 # st.title("ChatApp")
 # st.caption("Q&A")
 # st.write("議論を行いましょう！")
-user_number = st.text_input("参加者コードを半角で入力してエンターを押してください")
+user_number = st.text_input("参加者番号を半角で入力してエンターを押してください")
 if user_number:
     # st.write(f"こんにちは、{user_number}さん！")
     # 初期済みでない場合は初期化処理を行う
