@@ -133,6 +133,9 @@ if "past" not in st.session_state:
 if 'count' not in st.session_state:
     st.session_state.count = 0
 
+if 'number' not in st.session_state:
+    st.session_state.number = 0
+
 # 送信ボタンがクリックされた後の処理を行う関数を定義
 def on_input_change():
     # 会話のターン数をカウント
@@ -190,6 +193,7 @@ if user_number:
             cred = credentials.Certificate('chatnextin-firebase-adminsdk-tj4wu-db6ea15eef.json') 
             default_app = firebase_admin.initialize_app(cred)
     db = firestore.client()
+    st.session_state.number = 1
     #doc_ref = db.collection(user_number)
     #doc_ref = db.collection(u'tour').document(str(now))
 
@@ -204,17 +208,18 @@ with chat_placeholder.container():
         message(st.session_state.generated[i], key=str(key_generated), avatar_style="micah")
 
 # 質問入力欄と送信ボタンを設置
-with st.container():
-    if  st.session_state.count == 0:
-        user_message = st.text_input("「原子力発電は廃止すべき」という意見に対して、あなたの意見を入力して送信ボタンを押してください", key="user_message")
-        st.button("送信", on_click=on_input_change)
-    elif st.session_state.count == 5:
-        st.write("意見交換はこちらで終了です。")
-        redirect_link = "https://nagoyapsychology.qualtrics.com/jfe/form/SV_1M3cjOQM09gOcEC"
-        st.markdown(f'<a href="{redirect_link}" target="_blank">こちらを押してください。</a>', unsafe_allow_html=True)
-    else:
-        user_message = st.text_input("あなたの意見を入力して送信ボタンを押してください", key="user_message")
-        st.button("送信", on_click=on_input_change)
+if  st.session_state.number == 1:
+    with st.container():
+        if  st.session_state.count == 0:
+            user_message = st.text_input("「原子力発電は廃止すべき」という意見に対して、あなたの意見を入力して送信ボタンを押してください", key="user_message")
+            st.button("送信", on_click=on_input_change)
+        elif st.session_state.count == 5:
+            st.write("意見交換はこちらで終了です。")
+            redirect_link = "https://nagoyapsychology.qualtrics.com/jfe/form/SV_1M3cjOQM09gOcEC"
+            st.markdown(f'<a href="{redirect_link}" target="_blank">こちらを押してください。</a>', unsafe_allow_html=True)
+        else:
+            user_message = st.text_input("あなたの意見を入力して送信ボタンを押してください", key="user_message")
+            st.button("送信", on_click=on_input_change)
 # 質問入力欄 上とどっちが良いか    
 #if user_message := st.chat_input("聞きたいことを入力してね！", key="user_message"):
 #    on_input_change()
