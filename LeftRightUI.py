@@ -170,10 +170,12 @@ def on_input_change():
     st.session_state.user_message = ""
     Human_Agent = "Human" 
     AI_Agent = "AI" 
+    turn_count = "count"
     doc_ref = db.collection(user_number).document(str(now))
     doc_ref.set({
         Human_Agent: user_message,
         AI_Agent: answer
+        turn_count: st.session_state.count
     })
 
 # qualtricdへURL遷移
@@ -213,7 +215,7 @@ if  st.session_state.number == 1:
         if  st.session_state.count == 0:
             user_message = st.text_input("「原子力発電は廃止すべき」という意見に対して、あなたの意見を入力して送信ボタンを押してください", key="user_message")
             st.button("送信", on_click=on_input_change)
-        elif st.session_state.count == 5:
+        elif st.session_state.count >= 5:
             st.write("意見交換はこちらで終了です。")
             redirect_link = "https://nagoyapsychology.qualtrics.com/jfe/form/SV_1M3cjOQM09gOcEC"
             st.markdown(f'<a href="{redirect_link}" target="_blank">こちらを押してください。</a>', unsafe_allow_html=True)
