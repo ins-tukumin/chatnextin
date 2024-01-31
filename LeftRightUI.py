@@ -174,7 +174,7 @@ def on_input_change():
     doc_ref = db.collection(user_number).document(str(now))
     doc_ref.set({
         Human_Agent: user_message,
-        AI_Agent: answer
+        AI_Agent: answer,
         turn_count: st.session_state.count
     })
 
