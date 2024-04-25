@@ -151,18 +151,21 @@ def on_input_change():
     user_message = st.session_state.user_message
     conversation = load_conversation()
     with st.spinner("相手からの返信を待っています。。。"):
+        """
         if  st.session_state.count == 1:
-            # time.sleep(120)
+            time.sleep(120)
         elif st.session_state.count == 2:
-            # time.sleep(90)
+            time.sleep(90)
         elif st.session_state.count == 3:
-            # time.sleep(105)
+            time.sleep(105)
         elif st.session_state.count == 4:
-            # time.sleep(90)
+            time.sleep(90)
         elif st.session_state.count == 5:
-            # time.sleep(90)
+            time.sleep(90)
         else :
-            time.sleep(1)
+            time.sleep(3)
+        """
+        time.sleep(1)
         answer = conversation.predict(input=user_message)
     st.session_state.generated.append(answer)
     st.session_state.past.append(user_message)
